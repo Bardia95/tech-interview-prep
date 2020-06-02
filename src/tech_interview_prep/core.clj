@@ -159,8 +159,13 @@
 ;; => #'tech-interview-prep.core/is-anagram?-a
 
 (defn is-anagram?-b [s t]
-  (= (sort s) (sort t)))
+  (if (not= (count s) (count t))
+    false
+    (= (sort s) (sort t))))
 ;; => #'tech-interview-prep.core/is-anagram?-b
+
+(defn is-anagram?-c [s t]
+  ())
 
 (is-anagram?-a "anagram" "nagaram")
 ;; => true
