@@ -35,7 +35,11 @@
 
 (two-sum-a [2 7 11 15] 9)
 ;; => [0 1]
+(two-sum-b [2 7 11 15] 9)
+;; => [0 1]
 
+(two-sum-a [1 2 3 4] 7)
+;; => [2 3]
 (two-sum-b [1 2 3 4] 7)
 ;; => [2 3]
 
@@ -46,7 +50,7 @@
 (defn contains-duplicate-a
   [nums]
   (not= (count (set nums)) (count nums)))
-;; => #'tech-interview-prep.core/contains-duplicate
+;; => #'tech-interview-prep.core/contains-duplicate-a
 
 (defn contains-duplicate-b
   [nums]
@@ -55,19 +59,35 @@
                       :when (= (nums i) (nums (inc i)))]
                   (= (nums i) (nums (inc i))))))))
 ;; => #'tech-interview-prep.core/contains-duplicate-b
-;; => #'tech-interview-prep.core/contains-duplicate-b
+
+(defn contains-duplicate-c
+  [nums]
+  (loop [s #{}
+         i 0]
+    (if (= i (count nums))
+      false
+      (if (contains? s (nums i))
+        true
+        (recur (conj s (nums i)) (inc i))))))
+;; => #'tech-interview-prep.core/contains-duplicate-c
 
 (contains-duplicate-a [1 2 3 1])
 ;; => true
 (contains-duplicate-b [1 2 3 1])
+;; => true
+(contains-duplicate-c [1 2 3 1])
 ;; => true
 
 (contains-duplicate-a [1 2 3 4])
 ;; => false
 (contains-duplicate-b [1 2 3 4])
 ;; => false
+(contains-duplicate-c [1 2 3 4])
+;; => false
 
 (contains-duplicate-a [1 1 1 3 3 4 3 2 4 1])
 ;; => true
 (contains-duplicate-b [1 1 1 3 3 4 3 2 4 1])
+;; => true
+(contains-duplicate-c [1 1 1 3 3 4 3 2 4 1])
 ;; => true
