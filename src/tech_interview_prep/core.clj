@@ -123,12 +123,46 @@
 ;; => #'tech-interview-prep.core/max-profit-b
 
 
+(defn max-profit-c [prices]
+  (loop [min-price 10000
+         max-profit 0
+         i 0]
+    (if (= i (count prices))
+      max-profit
+      (if (< (prices i) min-price)
+        (recur (prices i) max-profit (inc i))
+        (if (> (- (prices i) min-price) max-profit)
+          (recur min-price (- (prices i) min-price) (inc i))
+          (recur min-price max-profit (inc i)))))))
+;; => #'tech-interview-prep.core/max-profit-c
+
 (max-profit-a [7 1 5 3 6 4])
 ;; => 5
 (max-profit-b [7 1 5 3 6 4])
 ;; => 5
+(max-profit-c [7 1 5 3 6 4])
+;; => 5
+
 
 (max-profit-a [7 6 4 3 1])
 ;; => 0
 (max-profit-b [7 6 4 3 1])
 ;; => 0
+(max-profit-c [7 6 4 3 1])
+;; => 0
+
+
+;; Given two strings s and t , write a function to determine if t is an anagram of s.
+
+(defn is-anagram?-a [s t]
+  (= (set s) (set t)))
+;; => #'tech-interview-prep.core/is-anagram?-a
+
+
+(is-anagram?-a "anagram" "nagaram")
+;; => true
+
+(is-anagram?-a "rat" "car")
+;; => false
+
+
