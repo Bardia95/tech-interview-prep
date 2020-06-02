@@ -155,7 +155,9 @@
 ;; Given two strings s and t , write a function to determine if t is an anagram of s.
 
 (defn is-anagram?-a [s t]
-  (= (set s) (set t)))
+  (if (not= (count s) (count t))
+    false
+    (= (set s) (set t))))
 ;; => #'tech-interview-prep.core/is-anagram?-a
 
 (defn is-anagram?-b [s t]
@@ -165,13 +167,23 @@
 ;; => #'tech-interview-prep.core/is-anagram?-b
 
 (defn is-anagram?-c [s t]
-  ())
+  (if (not= (count s) (count t))
+    false
+    (loop [i 0
+           c (zipmap (range 97 123) (repeat 26 0))]
+      (if (= i (count s))
+        (= c (zipmap (range 97 123) (repeat 26 0)))
+        (let [d (update c (int (.charAt s i)) inc)
+              e (update d (int (.charAt t i)) dec)]
+          (recur (inc i) e))))))
+;; => #'tech-interview-prep.core/is-anagram?-c
 
 (is-anagram?-a "anagram" "nagaram")
 ;; => true
 (is-anagram?-b"anagram" "nagaram")
 ;; => true
-(is-anagram?-c"anagram" "nagaram")
+(is-anagram?-c "anagram" "nagaram")
+;; => true
 
 
 (is-anagram?-a "rat" "car")
@@ -179,5 +191,6 @@
 (is-anagram?-b "rat" "car")
 ;; => false
 (is-anagram?-c "rat" "car")
+;; => false
 
 
