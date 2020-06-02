@@ -9,7 +9,7 @@
 ;; Because nums[0] + nums[1] = 2 + 7 = 9,
 ;; return [0, 1].
 
-(defn two-sum-two-pass
+(defn two-sum-a
   "Two-pass hash table"
   [nums target]
   (let [nums-index (zipmap nums (range))
@@ -22,7 +22,7 @@
 ;; => #'tech-interview-prep.core/two-sum-two-pass
 
 
-(defn two-sum-one-pass
+(defn two-sum-b
   "One-pass hash table"
   [nums target]
   (loop [ht {}
@@ -33,8 +33,27 @@
 ;; => #'tech-interview-prep.core/two-sum-one-pass
 
 
-(two-sum-one-pass [2 7 11 15] 9)
+(two-sum-a [2 7 11 15] 9)
 ;; => [0 1]
 
-(two-sum-two-pass [1 2 3 4] 7)
+(two-sum-b [1 2 3 4] 7)
 ;; => [2 3]
+
+;; Given an array of integers, find if the array contains any duplicates.
+
+;; Your function should return true if any value appears at least twice in the array, and it should return false if every element is distinct.
+
+(defn contains-duplicate-a
+  [nums]
+  (not= (count (set nums)) (count nums)))
+;; => #'tech-interview-prep.core/contains-duplicate
+
+
+(contains-duplicate-a [1 2 3 1])
+;; => true
+
+(contains-duplicate-a [1 2 3 4])
+;; => false
+
+(contains-duplicate-a [1 1 1 3 3 4 3 2 4 1])
+;; => true
