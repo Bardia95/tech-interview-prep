@@ -115,13 +115,11 @@
 
 (defn max-profit-b [prices]
   (let [m (apply max (for [i (range (count prices))
-                           j (range (count prices))
-                           :when (> j i)]
+                           j (range (inc i) (count prices))]
                        (- (prices j) (prices i))))]
     (if (> m 0)
       m
       0)))
-;; => #'tech-interview-prep.core/max-profit-b
 ;; => #'tech-interview-prep.core/max-profit-b
 
 
