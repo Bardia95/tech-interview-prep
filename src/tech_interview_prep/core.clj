@@ -158,11 +158,21 @@
   (= (set s) (set t)))
 ;; => #'tech-interview-prep.core/is-anagram?-a
 
+(defn is-anagram?-b [s t]
+  (= (sort s) (sort t)))
+;; => #'tech-interview-prep.core/is-anagram?-b
 
 (is-anagram?-a "anagram" "nagaram")
 ;; => true
+(is-anagram?-b"anagram" "nagaram")
+;; => true
+(is-anagram?-c"anagram" "nagaram")
+
 
 (is-anagram?-a "rat" "car")
 ;; => false
+(is-anagram?-b "rat" "car")
+;; => false
+(is-anagram?-c "rat" "car")
 
 
