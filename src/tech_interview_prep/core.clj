@@ -109,22 +109,28 @@
         (recur (inc i) (+ i 2) max-profit)
         (let [profit (- (prices j) (prices i))]
           (if (> profit max-profit)
-            (do
-              (println "i" i "j" j) (recur i (inc j) profit))
-            (do
-              (println "i" i "j" j) (recur i (inc j) max-profit))))))))
+            (recur i (inc j) profit)
+            (recur i (inc j) max-profit)))))))
 ;; => #'tech-interview-prep.core/max-profit-a
 
 (defn max-profit-b [prices]
-  (apply max (for [i (range (count prices))
-                   j (range (count prices))
-                   :when (> j i)]
-               (- (prices j) (prices i)))))
+  (let [m (apply max (for [i (range (count prices))
+                           j (range (count prices))
+                           :when (> j i)]
+                       (- (prices j) (prices i))))]
+    (if (> m 0)
+      m
+      0)))
 ;; => #'tech-interview-prep.core/max-profit-b
 ;; => #'tech-interview-prep.core/max-profit-b
 
+
+(max-profit-a [7 1 5 3 6 4])
+;; => 5
 (max-profit-b [7 1 5 3 6 4])
 ;; => 5
 
 (max-profit-a [7 6 4 3 1])
+;; => 0
+(max-profit-b [7 6 4 3 1])
 ;; => 0
