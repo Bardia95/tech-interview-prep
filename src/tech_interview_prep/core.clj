@@ -48,12 +48,26 @@
   (not= (count (set nums)) (count nums)))
 ;; => #'tech-interview-prep.core/contains-duplicate
 
+(defn contains-duplicate-b
+  [nums]
+  (let [nums (vec (sort nums))]
+    (< 0 (count (for [i (range (dec (count nums)))
+                      :when (= (nums i) (nums (inc i)))]
+                  (= (nums i) (nums (inc i))))))))
+;; => #'tech-interview-prep.core/contains-duplicate-b
+;; => #'tech-interview-prep.core/contains-duplicate-b
 
 (contains-duplicate-a [1 2 3 1])
+;; => true
+(contains-duplicate-b [1 2 3 1])
 ;; => true
 
 (contains-duplicate-a [1 2 3 4])
 ;; => false
+(contains-duplicate-b [1 2 3 4])
+;; => false
 
 (contains-duplicate-a [1 1 1 3 3 4 3 2 4 1])
+;; => true
+(contains-duplicate-b [1 1 1 3 3 4 3 2 4 1])
 ;; => true
