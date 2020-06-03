@@ -218,6 +218,7 @@
                          (reduced "invalid")
                          (vec (butlast %1)))
                        (conj %1 %2)) [] s))))
+;; => #'tech-interview-prep.core/valid-parens?
 
 
 
@@ -225,11 +226,27 @@
 ;; => :ok
 
 
+(defn build-products-array [v]
+  (loop [i 1
+         r [1]]
+    (if (= i (count v))
+      r
+      (recur (inc i)
+             (conj r (* (v (dec i)) (r (dec i))))))))
+;; => #'tech-interview-prep.core/build-products-array
+
 (defn product-of-array-except-self
   {:doc "Given an array nums of `n` integers where `n` > 1,
           return an array output where output[i] is equal to the product of all the elements of nums except nums[i]"
    :test #(do
-            (assert (= (product-of-array-except-self [1 2 3 4]) (24 12 8 6))))}
+            (assert (= (product-of-array-except-self [1 2 3 4]) '(24 12 8 6))))}
   [nums]
-  (mapv #(/ (reduce * nums) %) nums))
+  (map * (build-products-array nums) (vec (reverse (build-products-array (vec (reverse nums)))))))
+;; => #'tech-interview-prep.core/product-of-array-except-self
+
+(product-of-array-except-self [1 2 3 4])
+;; => (24 12 8 6)
+
 (test #'product-of-array-except-self)
+;; => :ok
+
