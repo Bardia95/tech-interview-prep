@@ -225,3 +225,11 @@
 ;; => :ok
 
 
+(defn product-of-array-except-self
+  {:doc "Given an array nums of `n` integers where `n` > 1,
+          return an array output where output[i] is equal to the product of all the elements of nums except nums[i]"
+   :test #(do
+            (assert (= (product-of-array-except-self [1 2 3 4]) (24 12 8 6))))}
+  [nums]
+  (mapv #(/ (reduce * nums) %) nums))
+(test #'product-of-array-except-self)
