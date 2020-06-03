@@ -194,3 +194,32 @@
 ;; => false
 
 
+;; Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+;; An input string is valid if:
+;; - Open brackets must be closed by the same type of brackets.
+;; - Open brackets must be closed in the correct order.
+
+;; Note that an empty string is also considered valid.
+
+(defn valid-parens?
+  {:test #(do
+            (assert (true? (valid-parens? "()")))
+            (assert (true? (valid-parens? "()[]{}")))
+            (assert (false? (valid-parens? "([")))
+            (assert (false? (valid-parens? "([)]")))
+            (assert (true? (valid-parens? "{[()]}"))))}
+  [s]
+  (let [ht {\] \[
+            \) \(
+            \} \{}]
+    (empty? (reduce #(if (contains? ht %2)
+                       (if (not= (ht %2) (last %1))
+                         (reduced "invalid")
+                         (vec (butlast %1)))
+                       (conj %1 %2)) [] s))))
+
+
+
+(test #'valid-parens?)
+;; => :ok
