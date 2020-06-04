@@ -244,8 +244,6 @@
   (map * (build-products-array nums) (vec (reverse (build-products-array (vec (reverse nums)))))))
 ;; => #'tech-interview-prep.core/product-of-array-except-self
 
-(product-of-array-except-self [1 2 3 4])
-;; => (24 12 8 6)
 
 (test #'product-of-array-except-self)
 ;; => :ok
