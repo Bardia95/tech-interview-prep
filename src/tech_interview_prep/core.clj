@@ -218,8 +218,6 @@
                          (reduced "invalid")
                          (vec (butlast %1)))
                        (conj %1 %2)) [] s))))
-;; => #'tech-interview-prep.core/valid-parens?
-
 
 
 (test #'valid-parens?)
@@ -233,18 +231,70 @@
       r
       (recur (inc i)
              (conj r (* (v (dec i)) (r (dec i))))))))
-;; => #'tech-interview-prep.core/build-products-array
+
+(def rev-products-array (comp vec reverse build-products-array vec reverse))
 
 (defn product-of-array-except-self
   {:doc "Given an array nums of `n` integers where `n` > 1,
-          return an array output where output[i] is equal to the product of all the elements of nums except nums[i]"
+         return an array output where output[i] is equal to
+         the product of all the elements of nums except nums[i]"
    :test #(do
             (assert (= (product-of-array-except-self [1 2 3 4]) '(24 12 8 6))))}
   [nums]
-  (map * (build-products-array nums) (vec (reverse (build-products-array (vec (reverse nums)))))))
-;; => #'tech-interview-prep.core/product-of-array-except-self
-
+  (let [l (build-products-array nums)
+        r (rev-products-array nums)]
+    (map * l r)))
 
 (test #'product-of-array-except-self)
 ;; => :ok
 
+
+
+(defn cross-sum [nums left right p]
+  (if (= left right)
+    (nums left)
+    (loop [left-subsum ##-Inf
+           curl-sum 0
+           i p]
+      (if (= i (dec left))
+        (loop [right-subsum ##-Inf
+               curr-sum 0
+               j (inc p)]
+          (if (= j (inc right))
+            (+ left-subsum right-subsum)
+            (recur (max right-subsum (+ curr-sum (nums j)))
+                   (+ curr-sum (nums j))
+                   (inc j))))
+        (recur (max left-subsum (+ curl-sum (nums i)))
+               (+ curl-sum (nums i))
+               (dec i))))))
+;; => #'tech-interview-prep.core/cross-sum
+;; => #'tech-interview-prep.core/cross-sum
+
+
+(defn msa-helper [nums left right]
+  (if (= left right)
+    (nums left)
+    (let [p (quot (+ left right) 2)
+          left-sum  (msa-helper nums left p)
+          right-sum (msa-helper nums (inc p) right)
+          cross-sum (cross-sum nums left right p)]
+      (max left-sum right-sum cross-sum))))
+;; => #'tech-interview-prep.core/msa-helper
+;; => #'tech-interview-prep.core/msa-helper
+
+(defn max-sub-array
+  {:doc "Given an integer array nums,
+         find the contiguous subarray (containing at
+         least one number) which has the largest sum
+         and return its sum."
+   :test #(do
+            (assert (= (max-sub-array [-2 1 -3 4 -1 2 1 -5 4]) 6)))}
+  [nums]
+  (msa-helper nums 0 (dec (count nums))));; => #'tech-interview-prep.core/max-sub-array
+;; => #'tech-interview-prep.core/max-sub-array
+
+(test #'max-sub-array)
+
+
+(max-sub-array [-2 1 4 2 1 4]);; => 12
