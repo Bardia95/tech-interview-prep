@@ -295,6 +295,36 @@
 ;; => #'tech-interview-prep.core/max-sub-array
 
 (test #'max-sub-array)
+;; => :ok
 
 
 (max-sub-array [-2 1 4 2 1 4]);; => 12
+
+
+(defn max-sub-array
+  {:doc "Given an integer array nums,
+         find the contiguous subarray (containing at
+         least one number) which has the largest sum
+         and return its sum."
+   :test #(do
+            (assert (= (max-sub-array [-2 1 -3 4 -1 2 1 -5 4]) 6)))}
+  [nums]
+  (let [n (count nums)]
+    (loop [i 1
+           cs (nums 0)
+           ms (nums 0)]
+      (if (= i n)
+        ms
+        (let [cs (max (nums i) (+ cs (nums i)))
+              ms (max ms cs)]
+          (recur (inc i) cs ms))))))
+;; => #'tech-interview-prep.core/max-sub-array
+;; => #'tech-interview-prep.core/max-sub-array
+;; => #'tech-interview-prep.core/max-sub-array
+
+(test #'max-sub-array)
+;; => :ok
+
+
+(max-sub-array [-2 1 -3 4 -1 2 1 -5 4])
+;; => 5
