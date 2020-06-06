@@ -268,8 +268,6 @@
         (recur (max left-subsum (+ curl-sum (nums i)))
                (+ curl-sum (nums i))
                (dec i))))))
-;; => #'tech-interview-prep.core/cross-sum
-;; => #'tech-interview-prep.core/cross-sum
 
 
 (defn msa-helper [nums left right]
@@ -280,34 +278,33 @@
           right-sum (msa-helper nums (inc p) right)
           cross-sum (cross-sum nums left right p)]
       (max left-sum right-sum cross-sum))))
-;; => #'tech-interview-prep.core/msa-helper
-;; => #'tech-interview-prep.core/msa-helper
 
-(defn max-sub-array
+(defn max-sub-array-a
   {:doc "Given an integer array nums,
          find the contiguous subarray (containing at
          least one number) which has the largest sum
-         and return its sum."
-   :test #(do
-            (assert (= (max-sub-array [-2 1 -3 4 -1 2 1 -5 4]) 6)))}
-  [nums]
-  (msa-helper nums 0 (dec (count nums))));; => #'tech-interview-prep.core/max-sub-array
-;; => #'tech-interview-prep.core/max-sub-array
+         and return its sum.
 
-(test #'max-sub-array)
+         Divide and conquer solution"
+   :test #(do
+            (assert (= (max-sub-array-a [-2 1 -3 4 -1 2 1 -5 4]) 6)))}
+  [nums]
+  (msa-helper nums 0 (dec (count nums))))
+;; => #'tech-interview-prep.core/max-sub-array-a
+
+(test #'max-sub-array-a)
 ;; => :ok
 
 
-(max-sub-array [-2 1 4 2 1 4]);; => 12
-
-
-(defn max-sub-array
+(defn max-sub-array-b
   {:doc "Given an integer array nums,
          find the contiguous subarray (containing at
          least one number) which has the largest sum
-         and return its sum."
+         and return its sum.
+
+         Greedy solution"
    :test #(do
-            (assert (= (max-sub-array [-2 1 -3 4 -1 2 1 -5 4]) 6)))}
+            (assert (= (max-sub-array-b [-2 1 -3 4 -1 2 1 -5 4]) 6)))}
   [nums]
   (let [n (count nums)]
     (loop [i 1
@@ -318,13 +315,33 @@
         (let [cs (max (nums i) (+ cs (nums i)))
               ms (max ms cs)]
           (recur (inc i) cs ms))))))
-;; => #'tech-interview-prep.core/max-sub-array
-;; => #'tech-interview-prep.core/max-sub-array
-;; => #'tech-interview-prep.core/max-sub-array
+;; => #'tech-interview-prep.core/max-sub-array-b
 
-(test #'max-sub-array)
+(test #'max-sub-array-b)
 ;; => :ok
 
 
-(max-sub-array [-2 1 -3 4 -1 2 1 -5 4])
-;; => 5
+
+(defn merge-intervals
+  {:doc "Given a collection of intervals,
+         merge all overlapping intervals"
+   :test #(do
+            (assert (= (merge-intervals [[1 3] [2 6] [8 10] [15 18]]) [[1 6] [8 10] [15 18]])))}
+  [intervals]
+  (let [intervals (vec (sort-by first intervals))]
+    (loop [i 0
+           merged []]
+      (if (= i (count intervals))
+        merged
+        (if (or (empty? merged) (< (last (last merged)) (first (intervals i))))
+          (recur (inc i)
+                 (conj merged (intervals i)))
+          (recur (inc i)
+                 (conj (vec (drop-last merged)) [(first (last merged)) (max (last (last merged)) (last (intervals i)))])))))))
+;; => #'tech-interview-prep.core/merge-intervals
+
+
+
+(test #'merge-intervals)
+;; => :ok
+
