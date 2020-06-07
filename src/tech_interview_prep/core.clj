@@ -369,11 +369,41 @@
   [strs]
   (vals
    (reduce (fn [m s]
-             (let [count (reduce #(update %1 (int %2) inc) (zipmap (range 97 123 (repeat 0))) s)]
+             (let [count (reduce #(update %1 (int %2) inc)
+                                 (zipmap (range 97 123 (repeat 0)))
+                                 s)]
                (if (m count)
                  (update m count (fn [c] (conj c s)))
                  (assoc m count [s]))) {}) strs)))
 
 
 (test #'group-anagrams-b)
+;; => :ok
+
+
+
+
+(defn max-product-subarray
+  {:doc "Given an integer array `nums`,
+         find the contiguous subarray
+         within an array which has the
+         largest product."
+   :test #(do
+            (assert (= (max-product-subarray [2 3 -2 3]) 6))
+            (assert (= (max-product-subarray [-2 0 -1]) 0))
+            (assert (= (max-product-subarray [-2 3 -4]) 24)))}
+  [nums]
+  (loop [i 1
+         minp (nums 0)
+         maxp (nums 0)
+         res (nums 0)]
+    (if (= i (count nums))
+      res
+      (let [maxp (max (nums i) (* maxp (nums i)) (* minp (nums i)))
+            minp (min (nums i) (* maxp (nums i)) (* minp (nums i)))
+            res (max maxp res)]
+        (recur (inc i) minp maxp res)))))
+;; => #'tech-interview-prep.core/max-product-subarray
+
+(test #'max-product-subarray)
 ;; => :ok
