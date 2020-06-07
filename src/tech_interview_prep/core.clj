@@ -403,7 +403,7 @@
             minp (min (nums i) (* maxp (nums i)) (* minp (nums i)))
             res (max maxp res)]
         (recur (inc i) minp maxp res)))))
-;; => #'tech-interview-prep.core/max-product-subarray
+
 
 (test #'max-product-subarray)
 ;; => :ok
@@ -440,7 +440,6 @@
             (if (and (> t (nums m)) (<= t (nums e)))
               (recur (inc m) e)
               (recur s (dec m)))))))))
-;; => #'tech-interview-prep.core/search-in-rotated-sorted-array
 
 
 (test #'search-in-rotated-sorted-array)
