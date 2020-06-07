@@ -232,7 +232,9 @@
       (recur (inc i)
              (conj r (* (v (dec i)) (r (dec i))))))))
 
+
 (def rev-products-array (comp vec reverse build-products-array vec reverse))
+
 
 (defn product-of-array-except-self
   {:doc "Given an array nums of `n` integers where `n` > 1,
@@ -245,9 +247,9 @@
         r (rev-products-array nums)]
     (map * l r)))
 
+
 (test #'product-of-array-except-self)
 ;; => :ok
-
 
 
 (defn cross-sum [nums left right p]
@@ -279,6 +281,7 @@
           cross-sum (cross-sum nums left right p)]
       (max left-sum right-sum cross-sum))))
 
+
 (defn max-sub-array-a
   {:doc "Given an integer array nums,
          find the contiguous subarray (containing at
@@ -290,7 +293,7 @@
             (assert (= (max-sub-array-a [-2 1 -3 4 -1 2 1 -5 4]) 6)))}
   [nums]
   (msa-helper nums 0 (dec (count nums))))
-;; => #'tech-interview-prep.core/max-sub-array-a
+
 
 (test #'max-sub-array-a)
 ;; => :ok
@@ -315,11 +318,10 @@
         (let [cs (max (nums i) (+ cs (nums i)))
               ms (max ms cs)]
           (recur (inc i) cs ms))))))
-;; => #'tech-interview-prep.core/max-sub-array-b
+
 
 (test #'max-sub-array-b)
 ;; => :ok
-
 
 
 (defn merge-intervals
@@ -329,19 +331,27 @@
             (assert (= (merge-intervals [[1 3] [2 6] [8 10] [15 18]]) [[1 6] [8 10] [15 18]])))}
   [intervals]
   (let [intervals (vec (sort-by first intervals))]
-    (loop [i 0
-           merged []]
-      (if (= i (count intervals))
-        merged
-        (if (or (empty? merged) (< (last (last merged)) (first (intervals i))))
-          (recur (inc i)
-                 (conj merged (intervals i)))
-          (recur (inc i)
-                 (conj (vec (drop-last merged)) [(first (last merged)) (max (last (last merged)) (last (intervals i)))])))))))
-;; => #'tech-interview-prep.core/merge-intervals
-
+    (reduce #(if (or (empty? %1) (< (last (last %1)) (first %2)))
+               (conj %1 %2)
+               (conj (vec (drop-last %1)) [(first (last %1)) (max (last (last %1)) (last %2))])) [] intervals)))
 
 
 (test #'merge-intervals)
 ;; => :ok
 
+
+
+(defn group-anagrams
+  {:doc "Given an array of strings,
+         group anagrams together."
+   :test #(do
+            (assert (= (group-anagrams ["eat" "tea" "tan" "ate" "nat" "bat"]) '(["eat" "tea" "ate"] ["tan" "nat"] ["bat"]))))}
+  [strs]
+  (vals
+   (reduce #(if (%1 (sort %2))
+              (update %1 (sort %2) (fn [c] (conj c %2)))
+              (assoc %1 (sort %2) [%2])) {} strs)))
+;; => #'tech-interview-prep.core/group-anagrams
+
+(test #'group-anagrams)
+;; => :ok
