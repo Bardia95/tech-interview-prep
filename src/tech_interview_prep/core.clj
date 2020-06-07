@@ -407,3 +407,42 @@
 
 (test #'max-product-subarray)
 ;; => :ok
+
+
+(defn search-in-rotated-sorted-array
+  {:doc "
+         Suppose an array sorted in ascending order
+         is rotated at some pivot unknown to you beforehand.
+
+         (i.e., [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]).
+
+         You are given a target value to search.
+         If found in the array return its index, otherwise return -1.
+
+         You may assume no duplicate exists in the array.
+
+         Your algorithm's runtime complexity must be in the order of O(log n)."
+   :test #(do
+            (assert (= (search-in-rotated-sorted-array [4 5 6 7 0 1 2] 0) 4))
+            (assert (= (search-in-rotated-sorted-array [4 5 6 7 0 1 2] 3) -1)))}
+  [nums t]
+  (loop [s 0
+         e (dec (count nums))]
+    (if (> s e)
+      -1
+      (let [m (quot (+ s e) 2)]
+        (if (= t (nums m))
+          m
+          (if (>= (nums m) (nums s))
+            (if (and (< t (nums m)) (>= t (nums s)))
+              (recur s (dec m))
+              (recur (inc m) e))
+            (if (and (> t (nums m)) (<= t (nums e)))
+              (recur (inc m) e)
+              (recur s (dec m)))))))))
+;; => #'tech-interview-prep.core/search-in-rotated-sorted-array
+
+
+(test #'search-in-rotated-sorted-array)
+;; => :ok
+
