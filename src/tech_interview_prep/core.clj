@@ -341,9 +341,11 @@
 
 
 
-(defn group-anagrams
+(defn group-anagrams-a
   {:doc "Given an array of strings,
-         group anagrams together."
+         group anagrams together.
+
+         Categorize by sorted string solution"
    :test #(do
             (assert (= (group-anagrams ["eat" "tea" "tan" "ate" "nat" "bat"]) '(["eat" "tea" "ate"] ["tan" "nat"] ["bat"]))))}
   [strs]
@@ -351,7 +353,27 @@
    (reduce #(if (%1 (sort %2))
               (update %1 (sort %2) (fn [c] (conj c %2)))
               (assoc %1 (sort %2) [%2])) {} strs)))
-;; => #'tech-interview-prep.core/group-anagrams
 
-(test #'group-anagrams)
+
+(test #'group-anagrams-a)
+;; => :ok
+
+
+(defn group-anagrams-b
+  {:doc "Given an array of strings,
+         group anagrams together.
+
+         Categorize by letter count solution"
+   :test #(do
+            (assert (= (group-anagrams ["eat" "tea" "tan" "ate" "nat" "bat"]) '(["eat" "tea" "ate"] ["tan" "nat"] ["bat"]))))}
+  [strs]
+  (vals
+   (reduce (fn [m s]
+             (let [count (reduce #(update %1 (int %2) inc) (zipmap (range 97 123 (repeat 0))) s)]
+               (if (m count)
+                 (update m count (fn [c] (conj c s)))
+                 (assoc m count [s]))) {}) strs)))
+
+
+(test #'group-anagrams-b)
 ;; => :ok
