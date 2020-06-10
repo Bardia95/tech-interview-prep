@@ -64,7 +64,8 @@
 
 
 (defn has-cycle-a?
-  {:doc "Given a linked list, determine if it has a cycle in it"}
+  {:doc "Given a linked list, determine if it has a cycle in it
+         Hash table solution"}
   [head]
   (loop
       [curr head
@@ -78,4 +79,18 @@
 ;; => #'tech-interview-prep.week-2/has-cycle-a?
 
 
-
+(defn has-cycle-b?
+  {:doc "Given a linked list, determine if it has a cycle in it
+         Two pointers solution"}
+  [head]
+  (if (or (= head nil) (= (:next head) nil))
+    false
+    (loop [slow head
+           fast (:next head)]
+      (if (= slow fast)
+        true
+        (if (or (= fast nil) (= (:next fast) nil))
+          false
+          (recur (:next slow)
+                 (:next (:next fast))))))))
+;; => #'tech-interview-prep.week-2/has-cycle-b?
