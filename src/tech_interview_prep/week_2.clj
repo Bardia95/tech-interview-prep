@@ -61,3 +61,21 @@
 
 (test #'reverse-list-b)
 ;; => :ok
+
+
+(defn has-cycle-a?
+  {:doc "Given a linked list, determine if it has a cycle in it"}
+  [head]
+  (loop
+      [curr head
+       ht {}]
+    (if (= curr nil)
+      false
+      (if (contains? ht curr)
+        true
+        (recur (:next curr)
+               (assoc ht curr true))))))
+;; => #'tech-interview-prep.week-2/has-cycle-a?
+
+
+
